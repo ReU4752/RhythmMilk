@@ -2,3 +2,6 @@
 
 # Build result
 Build/
+
+# Visual studio
+.vs
