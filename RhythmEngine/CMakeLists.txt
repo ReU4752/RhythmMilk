@@ -1,16 +1,14 @@
-file(GLOB TARGET_SOURCES
-     "*.hpp"
-     "*.cpp")
-
-file(GLOB RENDERER_SOURCES
-     "Renderer/*.hpp"
-     "Renderer/*.cpp")
-
-source_group("" FILES ${TARGET_SOURCES})
-source_group("Renderer" FILES ${RENDERER_SOURCES})
+file(GLOB_RECURSE headers "*.h" "*.hpp")
+file(GLOB_RECURSE sources "*.cpp")
+file(GLOB_RECURSE inlines "*.ini")
+source_group("" FILES ${headers} ${sources} ${inlines})
 
 include_directories(.)
 
-add_library(RhythmEngine STATIC ${TARGET_SOURCES} ${RENDERER_SOURCES})
+add_library(RhythmEngine STATIC
+            ${headers}
+            ${sources}
+            ${inlines}
+)
 
 set_property(TARGET RhythmEngine PROPERTY FOLDER "Engine")
