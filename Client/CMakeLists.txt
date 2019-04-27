@@ -121,15 +121,21 @@ else()
 	include_directories("${PROJECT_SOURCE_DIR}/Dependencies/glfw/include")
 endif()
 
-# Sources
 message("Current sources directory : ${CMAKE_CURRENT_SOURCE_DIR}")
 
+# Sources
 file(GLOB_RECURSE sources
 	"${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
+# Headers
+file(GLOB_RECURSE headers
+	"${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
+
 # Build executable
-add_executable(${target}
-	${sources})
+add_executable(${target} WIN32
+	${sources}
+	${headers}
+)
 
 # Project options
 set_property(TARGET ${target}
@@ -146,8 +152,7 @@ target_link_libraries(${target}
 ## Rendering library
 if(WIN32)
 	target_link_libraries(${target}
-		${DirectX_LIB_SEARCH_PATH}
-		d3d9.lib d3d11.lib d3dx11.lib
+		d3d9 d3d11
 	)
 else()
 	target_link_libraries(${target}
