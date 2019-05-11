@@ -1,17 +1,11 @@
-#include "Renderer.hpp"
-
-#include <stdio.h>
+#include "Application.hpp"
 
 #if defined (_WIN32) || defined(_WIN64)
 #include <Windows.h>
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-bool Init();
-void Render();
-
 HWND g_mainHWnd;
-Renderer g_renderer;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
@@ -54,15 +48,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		return 0;
 	}
 
-	// Init
-	if (!Init())
-	{
-		DestroyWindow(g_mainHWnd);
-		return 0;
-	}
-
 	ShowWindow(g_mainHWnd, nCmdShow);
 	UpdateWindow(g_mainHWnd);
+
+	// Init
+	Application app;
+	app.Init(g_mainHWnd);
 
 	bool quit = false;
 	MSG msg;
@@ -80,7 +71,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 			}
 		}
 
-		Render();
+		app.Update();
+
+		app.Render();
 	}
 
 	DestroyWindow(g_mainHWnd);
@@ -102,23 +95,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	return 0;
-}
-
-bool Init()
-{
-	RECT clientRect;
-	GetClientRect(g_mainHWnd, &clientRect);
-
-	g_renderer.InitRenderer(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, g_mainHWnd);
-
-	return true;
-}
-
-void Render()
-{
-	g_renderer.Clear();
-
-	g_renderer.Present();
 }
 
 #endif
